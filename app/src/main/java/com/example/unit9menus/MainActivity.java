@@ -9,6 +9,7 @@ import com.google.android.material.snackbar.Snackbar;
 import android.view.MenuItem;
 import android.view.View;
 
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.core.view.GravityCompat;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -24,7 +25,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.view.Menu;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private AppBarConfiguration mAppBarConfiguration;
 
@@ -50,6 +51,12 @@ public class MainActivity extends AppCompatActivity {
         });
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
+
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
@@ -60,6 +67,7 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
+        navigationView.setNavigationItemSelectedListener(this);
     }
 
     @Override
@@ -119,6 +127,44 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+
+    @SuppressWarnings("StatementWithEmptyBody")
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+
+        int id = item.getItemId();
+
+        if (id == R.id.add_nav) {
+            Snackbar.make(getWindow().getDecorView(), "Add study mates not implemented yet", Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show();
+            return true;
+        } else if (id == R.id.delete_nav) {
+            Snackbar.make(getWindow().getDecorView(), "Delete study mates not implemented yet", Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show();
+            return true;
+        } else if (id == R.id.settings_nav) {
+            Intent settingsIntent = new Intent(  this, SettingsActivity.class);
+            startActivity(settingsIntent);
+            return true;
+        } else if (id == R.id.email_nav) {
+            Intent emailIntent = new Intent(Intent.ACTION_SEND);
+            emailIntent.setType("*/*");
+            emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Hey Study Partner");
+            if (emailIntent.resolveActivity((getPackageManager())) != null) {
+                startActivity(emailIntent);
+            }
+            return true;
+        } else if (id == R.id.sms_nav) {
+            Intent smsIntent = new Intent(Intent.ACTION_SEND);
+            smsIntent.setType("*/*");
+            smsIntent.putExtra(Intent.EXTRA_SUBJECT, "Hey Study Partner");
+            if (smsIntent.resolveActivity((getPackageManager())) != null) {
+                startActivity(smsIntent);
+            }
+            return true;
+        }
+        return true;
+    }
 
     @Override
     public boolean onSupportNavigateUp() {
